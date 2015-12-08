@@ -23,7 +23,9 @@ void setArrayVal(int *mat, int row, int col, int val){
 int main(){
 
 	int *Toeplitz = new int[n*n];
+	int *pmatrix = new int[n];
 	int count = 10;
+	
 	// Initialize toeplitz (2n-1 distinct vals)
 	for (int j = n-1; j > 0; j--){
 		int l = 0;
@@ -46,14 +48,11 @@ int main(){
 		}
 		count++;
 	}		
-	//for(int j = 1; j < n; j++){
-	//		setArrayVal(Toeplitz, i, j, count);
-	//		count++;
-	//		}
-	//	}
 			
 	
 	
+	
+	// prints topelitz matrix
 	for (int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){
 			cout << getArrayVal(Toeplitz, i, j) << " ";
