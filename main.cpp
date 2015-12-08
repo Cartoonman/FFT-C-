@@ -24,13 +24,33 @@ int main(){
 
 	int *Toeplitz = new int[n*n];
 	int count = 10;
-	// Initialize toeplitz 
-	for (int i = 0; i < n; i++){
-		for(int j = 0; j < n; j++){
-			setArrayVal(Toeplitz, i, j, count);
-			count++;
-			}
+	// Initialize toeplitz (2n-1 distinct vals)
+	for (int j = n-1; j > 0; j--){
+		int l = 0;
+		int p = j;
+		while(p < n){
+		setArrayVal(Toeplitz, p, l, count);
+		l++;
+		p++;
 		}
+		count++;
+		}
+		
+	for (int i = 0; i < n; i++){
+		int k = 0;
+		int m = i;
+		while(k < n-i){
+		setArrayVal(Toeplitz, k, m, count);
+		k++;
+		m++;
+		}
+		count++;
+	}		
+	//for(int j = 1; j < n; j++){
+	//		setArrayVal(Toeplitz, i, j, count);
+	//		count++;
+	//		}
+	//	}
 			
 	
 	
