@@ -23,23 +23,35 @@ void setArrayVal(int *mat, int row, int col, int val){
 int main(){
 
 	int *Toeplitz = new int[n*n];
+	int count = 10;
+	// Initialize toeplitz 
+	for (int i = 0; i < n; i++){
+		for(int j = 0; j < n; j++){
+			setArrayVal(Toeplitz, i, j, count);
+			count++;
+			}
+		}
+			
+	
+	
+	for (int i = 0; i < n; i++){
+		for(int j = 0; j < n; j++){
+			cout << getArrayVal(Toeplitz, i, j) << " ";
+			}
+		cout << endl;
+		}
 	
 	
 	
+	/*
 	setArrayVal(Toeplitz, 2, 1, 5);
-	
-	
-	
-	
+
 	int x = getArrayVal(Toeplitz, 2, 1);
-	
 	
 	cout << x << endl;
 	
-	
-	
 	delete[] Toeplitz; //delete
-		
+	*/
 	
 	
 	
