@@ -37,7 +37,6 @@ int main(){
 		}
 		count++;
 		}
-		
 	for (int i = 0; i < n; i++){
 		int k = 0;
 		int m = i;
@@ -47,9 +46,27 @@ int main(){
 		m++;
 		}
 		count++;
-	}		
-			
-	
+	}	
+
+	// Initialize pmatrix
+	for (int lol = 0; lol < n; lol++){pmatrix[lol] = count++;}
+		
+		
+	for (int lol = 0; lol < n; lol++){
+		cout << pmatrix[lol] << endl;
+		}
+		cout << endl;
+		
+	// MATRIXMULTIP O(n^2)
+	int *result = new int[n];
+	int	tempsum;
+	for (int i = 0; i < n; i++){
+		tempsum = 0;
+		for (int j = 0; j < n; j++){
+			tempsum += Toeplitz[i + j*n] * pmatrix[j];
+		}
+		result[i] = tempsum;
+	}
 	
 	
 	// prints topelitz matrix
@@ -60,7 +77,11 @@ int main(){
 		cout << endl;
 		}
 	
-	
+		cout << "RESULT: ";
+	for (int lol = 0; lol < n; lol++){
+		cout << result[lol] << " ";
+		}
+		cout << endl;
 	
 	/*
 	setArrayVal(Toeplitz, 2, 1, 5);
