@@ -9,7 +9,7 @@ typedef std::complex<double> Complex;
 typedef std::valarray<Complex> CArray;
 
 /***************************/
-int n = 10;  // width and height of the matrix
+int n = 5;  // width and height of the matrix
 /****************************/
 
 //Functions
@@ -72,8 +72,7 @@ int main(){
 	start = std::clock();
 	int *Toeplitz = new int[n*n];
 	int *pmatrix = new int[n];
-	int count = 10;
-	
+	int count = 10; // Adjust the initial val for matrix pumping
 	// Initialize toeplitz (2n-1 distinct vals)
 	for (int j = n-1; j > 0; j--){
 		int l = 0;
@@ -83,7 +82,7 @@ int main(){
 		l++;
 		p++;
 		}
-		count++;
+		count = (count + 1)%32;
 		}
 	for (int i = 0; i < n; i++){
 		int k = 0;
@@ -93,28 +92,13 @@ int main(){
 		k++;
 		m++;
 		}
-		count++;
+		count = (count + 1)%32;
 	}	
 
 	// Initialize pmatrix
 	for (int lol = 0; lol < n; lol++){pmatrix[lol] = count++;}
 		
-		
-	for (int lol = 0; lol < n; lol++){
-		cout << pmatrix[lol] << endl;
-		}
-		cout << endl;
 
-	// MATRIXMULTIP O(n^2)
-	int *result = new int[n];
-	int	tempsum;
-	for (int i = 0; i < n; i++){
-		tempsum = 0;
-		for (int j = 0; j < n; j++){
-			tempsum += Toeplitz[i + j*n] * pmatrix[j];
-		}
-		result[i] = tempsum;
-	}
 	
 	
 	// Matrix Multi w/ FFT
@@ -134,130 +118,71 @@ int main(){
 	
 	
 	// initialize arrays for fft. c is next highest power of 2 of our polys for fft.
-	int *tpoly = new int[c]; //toeplitz 
-	int *ppoly = new int[c]; //vector
-	int *rpoly = new int[c]; //result
+	Complex *tfft = new Complex[c];
+	Complex *pfft = new Complex[c];
 	int i = 0;
 	int u = b;
 	
 	//making the tpoly array. 
 	while(u >= 0){
-		cout << u << endl;
-		tpoly[i] = getArrayVal(Toeplitz, u, 0);
+		tfft[i] = getArrayVal(Toeplitz, u, 0);
 		u--;
 		i++;
 		}
 	u = 1;
 	while(u < n-1){
-		tpoly[i] = getArrayVal(Toeplitz, 0, u);
+		tfft[i] = getArrayVal(Toeplitz, 0, u);
 		u++;
 		i++;
 		}
 	while(i <= c-1){
-		tpoly[i] = 0;
+		tfft[i] = 0;
 		i++;
 		}
 		
 	// making the ppoly array
 	i = 0;	
 	while(i <= n-1){
-		ppoly[i] = pmatrix[n-1-i];
+		pfft[i] = pmatrix[n-1-i];
 		i++;
 		}
 	while(i <= c-1){
-		ppoly[i] = 0;
+		pfft[i] = 0;
 		i++;
 		}	
-		
-	cout << " TARR: ";	
-	for (int lol = 0; lol < c; lol++){
-		cout << tpoly[lol] << " ";
-		}
-	cout << endl;
-	cout << " PARR: ";	
-	for (int lol = 0; lol < c; lol++){
-		cout << ppoly[lol] << " ";
-		}		
-	cout << endl;
 	
 	
-	Complex *tfft = new Complex[c];
-	for (int lol = 0; lol < c; lol++){
-		tfft[lol] = tpoly[lol];
-		}
+
     CArray tft(tfft, c);
-	
-	
-	Complex *pfft = new Complex[c];
-	for (int lol = 0; lol < c; lol++){
-		pfft[lol] = ppoly[lol];
-		}
     CArray pft(pfft, c);
 
-	
-	
 	Complex *rfft = new Complex[c];
-	for (int lol = 0; lol < c; lol++){
-		rfft[lol] = 0;
-		}
     CArray rft(rfft, c);
 
 	
 	fft (tft);
 	fft (pft);
-	
-		for (int lol = 0; lol < c; lol++){
-		cout << tft[lol] << " ";
-		}
-		cout << endl;
-		
-		for (int lol = 0; lol < c; lol++){
-		cout << pft[lol] << " ";
-		}
-		cout << endl;
 			
 			
 			
 	for(int i = 0; i < c; i++){
 		rft[i] = tft[i]*pft[i];
 		}
-		for (int lol = 0; lol < c; lol++){
-		cout << rft[lol] << " ";
-		}
-		cout << endl;
 		
 	ifft (rft);
 
-	cout << " OUTPUT: ";	
-	for (int lol = 0; lol < c; lol++){
-		cout << rft[lol] << " ";
-		}		
-	cout << endl;
-	
+	i = 0;
+	int *result = new int [n];
+	while(i != n){
+		result[i] = (int)rft[n-1+i].real();
+		i++;
+		}
+	cout << " OUTPUT: ";
+		for (int lol = 0; lol < n; lol++){
+		cout << result[lol] << " ";
+		}	
     
 	
-	// prints topelitz matrix
-	for (int i = 0; i < n; i++){
-		for(int j = 0; j < n; j++){
-			cout << getArrayVal(Toeplitz, i, j) << " ";
-			}
-		cout << endl;
-		}
-	
-		cout << "RESULT: ";
-	for (int lol = 0; lol < n; lol++){
-		cout << result[lol] << " ";
-		}
-		cout << endl;
-	
-	/*
-	setArrayVal(Toeplitz, 2, 1, 5);
-	int x = getArrayVal(Toeplitz, 2, 1);
-	
-	cout << x << endl;
-	
-	delete[] Toeplitz; //delete
-	*/
 	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 	std::cout<<"Time taken for Multiplying "<<n<<" dimentional matrix is : "<< duration <<" Seconds"<<'\n';
 	
