@@ -1,8 +1,10 @@
 #include <iostream>
+#include <cstdio>
+#include <ctime>
 using namespace std;
 
 /***************************/
-int n = 5;  // width and height of the matrix
+int n = 10;  // width and height of the matrix
 /****************************/
 
 //Functions
@@ -21,7 +23,9 @@ void setArrayVal(int *mat, int row, int col, int val){
 
 
 int main(){
-
+	std::clock_t start;
+    double duration;
+	start = std::clock();
 	int *Toeplitz = new int[n*n];
 	int *pmatrix = new int[n];
 	int count = 10;
@@ -56,7 +60,7 @@ int main(){
 		cout << pmatrix[lol] << endl;
 		}
 		cout << endl;
-		
+
 	// MATRIXMULTIP O(n^2)
 	int *result = new int[n];
 	int	tempsum;
@@ -68,6 +72,8 @@ int main(){
 		result[i] = tempsum;
 	}
 	
+	
+	    
 	
 	// prints topelitz matrix
 	for (int i = 0; i < n; i++){
@@ -92,8 +98,8 @@ int main(){
 	
 	delete[] Toeplitz; //delete
 	*/
-	
-	
+	duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+	std::cout<<"Time taken for Multiplying "<<n<<" dimentional matrix is : "<< duration <<" Seconds"<<'\n';
 	
 	return 0;
 }
